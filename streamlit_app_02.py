@@ -1597,7 +1597,7 @@ def run_complete_optimization_pipeline(signal_power_db, signal_variation, noise_
         
         # 3. 完整优化流程主窗口
         st.markdown("---")
-        st.markdown("#### 完整优化流程结果（主窗口）")
+        st.markdown("#### 完整优化流程结果")
         
         # 性能指标
         final_metrics = calculate_signal_metrics(clean_signal, noisy_signal, enhanced_signal)
