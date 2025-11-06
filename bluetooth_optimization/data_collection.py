@@ -3,7 +3,7 @@ import logging
 from utils import progress_bar
 
 def collect_environment_data(sample_count=1000, duration=8):
-    time_points = np.linspace(0, 10, sample_count)
+    time_points = np.linspace(0, 10, sample_count)  # 模拟10秒内的数据采集
     
     signal_strength = -60 + 15 * np.sin(time_points) + np.random.normal(0, 3, sample_count)
     
