@@ -292,8 +292,14 @@ def main():
     # 侧边栏 - 可收缩的控制面板
     with st.sidebar:
         st.markdown("""
-        <div style="background: rgba(20, 40, 80, 0.5); padding: 1rem; border-radius: 10px; border: 1px solid rgba(0, 200, 255, 0.2);">
-        <h2 style="color: #00d4ff; text-align: center; margin-bottom: 1rem;">控制面板</h2>
+        <style>
+            section[data-testid="stSidebar"] {
+                background: rgba(255, 255, 255, 0.5)!important;
+                border-right: 2px solid rgba(0, 212, 255, 0.3);
+            }
+        </style>
+        <div style="background: rgba(20, 40, 80, 0.5); padding: 2rem; height: 50px; border-radius: 10px; border: 1px solid rgba(0, 200, 255, 0.2); display: flex; align-items: center; justify-content: center;">
+            <h2 style="color: #00d4ff; text-align: center; margin: 0;">控制面板</h2>
         </div>
         """, unsafe_allow_html=True)
         
