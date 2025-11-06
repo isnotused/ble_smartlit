@@ -292,8 +292,8 @@ def main():
     # 侧边栏 - 可收缩的控制面板
     with st.sidebar:
         st.markdown("""
-        <div style="background: rgba(20, 40, 80, 0.8); padding: 1rem; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2);">
-        <h3 style="color: #00d4ff; text-align: center; margin-bottom: 1rem;">🛠️ 控制面板</h3>
+        <div style="background: rgba(20, 40, 80, 0.5); padding: 1rem; border-radius: 10px; border: 1px solid rgba(0, 200, 255, 0.2);">
+        <h2 style="color: #00d4ff; text-align: center; margin-bottom: 1rem;">控制面板</h2>
         </div>
         """, unsafe_allow_html=True)
         
@@ -330,19 +330,19 @@ def main():
         
         output_file = st.text_input(
             "输出文件名",
-            value="streamlit_optimization_results.h5",
+            value="optimization_results.h5",
             help="保存结果的HDF5文件名"
         )
         
         st.markdown("---")
         
         # 运行控制按钮
-        st.markdown("##### 🚀 快速操作")
+        st.markdown("##### 快速操作")
         
-        run_optimize = st.button("🎯 开始优化", type="primary", use_container_width=True)
-        run_demo = st.button("🎬 演示模式", use_container_width=True)
-        run_monitor = st.button("📊 监控模式", use_container_width=True)
-        run_test = st.button("🧪 测试模式", use_container_width=True)
+        run_optimize = st.button("开始优化", type="primary", use_container_width=True)
+        run_demo = st.button("演示模式", use_container_width=True)
+        run_monitor = st.button("监控模式", use_container_width=True)
+        run_test = st.button("测试模式", use_container_width=True)
     
     # 主内容区域 - 现在使用全宽
     if run_optimize:
@@ -359,7 +359,7 @@ def main():
     
     
     # 主要内容区域 - 使用选项卡
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 实时监控", "📈 数据分析", "🧪 测试验证", "⚡ 优化系统", "ℹ️ 系统信息"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["实时监控", "数据分析", "测试验证", "优化系统", "系统信息"])
     
     with tab1:
         show_main_dashboard(duration, cycles)
@@ -715,7 +715,7 @@ def analyze_h5_file(filepath: Path):
             
             if 'enhanced_signal' in f:
                 signal_data = f['enhanced_signal'][:]
-                st.subheader("📈 增强信号分析")
+                st.subheader("增强信号分析")
                 fig = go.Figure()
                 fig.add_trace(go.Scatter(
                     x=np.arange(min(1000, len(signal_data))),
@@ -727,7 +727,7 @@ def analyze_h5_file(filepath: Path):
             
             if 'quality_matrix' in f:
                 quality_data = f['quality_matrix'][:]
-                st.subheader("📊 质量评估分析")
+                st.subheader("质量评估分析")
                 quality_scores = quality_data[:, :, 1].mean(axis=1)
                 
                 fig = go.Figure()
@@ -870,13 +870,13 @@ def show_data_analysis_main():
             format_func=lambda x: x.name
         )
         
-        col1, col2 = st.columns([2, 1])
-        
-        with col2:
+        row1, row2 = st.columns([2, 1])
+
+        with row2:
             if st.button("分析数据", type="primary"):
                 analyze_h5_file(selected_file)
-        
-        with col1:
+
+        with row1:
             st.info(f"当前选择: {selected_file.name}")
     else:
         st.warning("📂 未找到数据文件，请先运行优化生成数据")
@@ -1487,13 +1487,13 @@ def run_complete_optimization_pipeline(signal_power_db, signal_variation, noise_
             time.sleep(0.5)
             progress_placeholder.empty()
         
-        st.success("✅ 完整优化流程执行完成！")
+        st.success("✅ 优化完成！")
         
         # ==================== 显示结果 ====================
         
         # 1. 各滤波策略小窗口对比
         st.markdown("---")
-        st.markdown("#### 📊 各滤波策略对比（小窗口）")
+        st.markdown("#### 滤波策略对比")
         
         filter_display_names = {
             'Kalman': '卡尔曼滤波',
@@ -1645,7 +1645,7 @@ def run_complete_optimization_pipeline(signal_power_db, signal_variation, noise_
             """, unsafe_allow_html=True)
         
         # 信号波形对比
-        st.markdown("#### 📈 完整流程信号对比")
+        st.markdown("#### 完整流程信号对比")
         
         display_samples_main = min(1000, len(t))
         t_display = t[:display_samples_main]
@@ -1713,7 +1713,7 @@ def run_complete_optimization_pipeline(signal_power_db, signal_variation, noise_
         
         # 4. 质量评估矩阵
         st.markdown("---")
-        st.markdown("#### 📊 信号质量评估矩阵")
+        st.markdown("#### 信号质量评估矩阵")
         
         col1, col2 = st.columns([2, 1])
         
@@ -1754,7 +1754,7 @@ def run_complete_optimization_pipeline(signal_power_db, signal_variation, noise_
             st.plotly_chart(fig_quality, width='stretch')
         
         with col2:
-            st.markdown("##### 📋 参数调整建议")
+            st.markdown("##### 参数调整建议")
             st.markdown(f"""
             <div style="background: rgba(20, 40, 80, 0.8); padding: 1rem; border-radius: 8px; border: 1px solid rgba(0, 212, 255, 0.3);">
                 <p style="color: #ffffff; margin: 0.3rem 0;">
@@ -1778,7 +1778,7 @@ def run_complete_optimization_pipeline(signal_power_db, signal_variation, noise_
         
         # 5. 详细分析图表
         st.markdown("---")
-        st.markdown("#### 📈 详细分析结果")
+        st.markdown("#### 详细分析结果")
         
         with st.expander("🔍 查看完整分析图表", expanded=False):
             # 创建子标签页
@@ -2023,7 +2023,7 @@ def run_complete_optimization_pipeline(signal_power_db, signal_variation, noise_
                 )
                 
                 fig_pca.update_xaxes(title_text="主成分", gridcolor='rgba(255,255,255,0.1)')
-                fig_pca.update_yaxes(title_text="方差解释 (%)", gridcolor='rgba(255,255,255,0.1)')
+                fig_pca.update_yaxes(title_text="方差解释 (%)", gridcolor='rgba(255,255,255,0.1)',range=[0, max(explained_var)*120], row=1, col=1)
                 
                 fig_pca.update_layout(
                     height=400,
@@ -2199,7 +2199,7 @@ def run_interactive_optimization(signal_power_db, signal_variation, noise_power_
     st.success("✅ 优化完成！")
     
     # 显示性能指标
-    st.markdown("#### 📊 性能指标对比")
+    st.markdown("#### 性能指标对比")
     
     col1, col2, col3 = st.columns(3)
     
@@ -2241,7 +2241,7 @@ def run_interactive_optimization(signal_power_db, signal_variation, noise_power_
     
     # 绘制信号对比图
     st.markdown("---")
-    st.markdown("#### 📈 信号波形对比")
+    st.markdown("#### 信号波形对比")
     
     # 只显示前1000个采样点以提高性能
     display_samples = min(1000, len(t))
