@@ -258,16 +258,39 @@ def main():
         border: 1px solid rgba(0, 212, 255, 0.3);
         border-radius: 8px;
     }
-    </style>
+    
+    /* 侧边栏样式 */
+    section[data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #0a0e27 0%, #1a2332 100%);
+        border-right: 2px solid rgba(0, 212, 255, 0.3);
+    }
+    
+    section[data-testid="stSidebar"] > div {
+        background: transparent;
+    }
+    
+    /* 侧边栏按钮样式 */
+    section[data-testid="stSidebar"] .stButton > button {
+        width: 100%;
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 153, 204, 0.2) 100%);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        color: #ffffff;
+        transition: all 0.3s ease;
+    }
+    
+    section[data-testid="stSidebar"] .stButton > button:hover {
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.4) 0%, rgba(0, 153, 204, 0.4) 100%);
+        border: 1px solid rgba(0, 212, 255, 0.6);
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+        </style>
     """, unsafe_allow_html=True)
     
     # 主标题
     st.markdown('<h1 class="main-header">📡 低功耗蓝牙信号接收优化系统</h1>', unsafe_allow_html=True, width="stretch")
     
-    # 主要布局：左侧内容区域，右侧控制面板
-    main_col, control_col = st.columns([3, 1])
-    
-    with control_col:
+    # 侧边栏 - 可收缩的控制面板
+    with st.sidebar:
         st.markdown("""
         <div style="background: rgba(20, 40, 80, 0.8); padding: 1rem; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2);">
         <h3 style="color: #00d4ff; text-align: center; margin-bottom: 1rem;">🛠️ 控制面板</h3>
@@ -314,43 +337,44 @@ def main():
         st.markdown("---")
         
         # 运行控制按钮
-        st.markdown("##### 快速操作")
+        st.markdown("##### 🚀 快速操作")
         
-        if st.button("开始优化", type="primary", width='stretch'):
-            with main_col:
-                run_optimization_mode(duration, cycles, output_file)
-        
-        if st.button("演示模式", width='stretch'):
-            with main_col:
-                run_demo_mode()
-        
-        if st.button("监控模式", width='stretch'):
-            with main_col:
-                run_monitor_mode(duration, cycles)
-        
-        if st.button("测试模式", width='stretch'):
-            with main_col:
-                run_test_mode()
-        
+        run_optimize = st.button("🎯 开始优化", type="primary", use_container_width=True)
+        run_demo = st.button("🎬 演示模式", use_container_width=True)
+        run_monitor = st.button("📊 监控模式", use_container_width=True)
+        run_test = st.button("🧪 测试模式", use_container_width=True)
     
-    with main_col:
-        # 主要内容区域 - 使用选项卡
-        tab1, tab2, tab3, tab4, tab5 = st.tabs(["实时监控", "数据分析", "测试验证", "优化系统", "系统信息"])
-        
-        with tab1:
-            show_main_dashboard(duration, cycles)
-        
-        with tab2:
-            show_data_analysis_main()
-        
-        with tab3:
-            show_test_interface_main()
-        
-        with tab4:
-            show_interactive_optimization()
-        
-        with tab5:
-            show_system_info(mode, duration, cycles, output_file)
+    # 主内容区域 - 现在使用全宽
+    if run_optimize:
+        run_optimization_mode(duration, cycles, output_file)
+    
+    if run_demo:
+        run_demo_mode()
+    
+    if run_monitor:
+        run_monitor_mode(duration, cycles)
+    
+    if run_test:
+        run_test_mode()
+    
+    
+    # 主要内容区域 - 使用选项卡
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 实时监控", "📈 数据分析", "🧪 测试验证", "⚡ 优化系统", "ℹ️ 系统信息"])
+    
+    with tab1:
+        show_main_dashboard(duration, cycles)
+    
+    with tab2:
+        show_data_analysis_main()
+    
+    with tab3:
+        show_test_interface_main()
+    
+    with tab4:
+        show_interactive_optimization()
+    
+    with tab5:
+        show_system_info(mode, duration, cycles, output_file)
 
 
 def run_optimization_mode(duration: float, cycles: int, output_file: str):
