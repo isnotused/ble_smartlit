@@ -276,7 +276,7 @@ def main():
         
         # 运行模式选择
         mode = st.selectbox(
-            "🎯 运行模式",
+            "运行模式",
             options=["optimize", "demo", "monitor", "test", "interactive"],
             index=0,
             help="选择系统运行模式"
@@ -313,65 +313,29 @@ def main():
         
         st.markdown("---")
         
-        # 系统状态
-        st.markdown("##### 📊 系统状态")
-        if REAL_MODULES_AVAILABLE:
-            st.markdown("""
-            <div class="status-card success">
-                ✅ 真实模块已加载
-            </div>
-            """, unsafe_allow_html=True)
-        else:
-            st.markdown(f"""
-            <div class="status-card warning">
-                ⚠️ 模拟模式运行<br>
-                <small>{module_status}</small>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        st.markdown("---")
-        
         # 运行控制按钮
-        st.markdown("##### 🚀 快速操作")
+        st.markdown("##### 快速操作")
         
-        if st.button("🎯 开始优化", type="primary", use_container_width=True):
+        if st.button("开始优化", type="primary", width='stretch'):
             with main_col:
                 run_optimization_mode(duration, cycles, output_file)
         
-        if st.button("🎭 演示模式", use_container_width=True):
+        if st.button("演示模式", width='stretch'):
             with main_col:
                 run_demo_mode()
         
-        if st.button("📊 监控模式", use_container_width=True):
+        if st.button("监控模式", width='stretch'):
             with main_col:
                 run_monitor_mode(duration, cycles)
         
-        if st.button("🧪 测试模式", use_container_width=True):
+        if st.button("测试模式", width='stretch'):
             with main_col:
                 run_test_mode()
         
-        # 当前配置摘要
-        st.markdown("---")
-        st.markdown("##### 📋 当前配置")
-        
-        st.markdown(f"""
-        <div class="metric-card">
-            <h3>模式</h3>
-            <p>{mode.upper()}</p>
-        </div>
-        <div class="metric-card">
-            <h3>时长</h3>
-            <p>{duration}s</p>
-        </div>
-        <div class="metric-card">
-            <h3>循环</h3>
-            <p>{cycles}</p>
-        </div>
-        """, unsafe_allow_html=True)
     
     with main_col:
         # 主要内容区域 - 使用选项卡
-        tab1, tab2, tab3, tab4, tab5 = st.tabs(["📈 实时监控", "📊 数据分析", "🧪 测试验证", "🎛️ 交互优化", "📋 系统信息"])
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(["实时监控", "数据分析", "测试验证", "优化系统", "系统信息"])
         
         with tab1:
             show_main_dashboard(duration, cycles)
@@ -470,7 +434,7 @@ def run_optimization_mode(duration: float, cycles: int, output_file: str):
                     yaxis_title="质量评分",
                     template="plotly_white"
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch')
             
         except Exception as e:
             st.error(f"❌ 保存结果失败: {str(e)}")
@@ -488,7 +452,7 @@ def run_optimization_mode(duration: float, cycles: int, output_file: str):
 
 def run_demo_mode():
     """运行演示模式"""
-    st.info("🎭 启动演示模式...")
+    st.info("启动演示模式...")
     
     with st.spinner("正在运行演示..."):
         demo_steps = [
@@ -517,7 +481,7 @@ def run_demo_mode():
     fig.add_trace(go.Scatter(x=t[:200], y=original_signal[:200], name='原始信号'), row=1, col=1)
     fig.add_trace(go.Scatter(x=t[:200], y=optimized_signal[:200], name='优化信号'), row=1, col=2)
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def run_monitor_mode(duration: float, cycles: int):
@@ -552,7 +516,7 @@ def run_monitor_mode(duration: float, cycles: int):
             fig = make_subplots(rows=1, cols=2, subplot_titles=('处理延迟趋势', '信号质量趋势'))
             fig.add_trace(go.Scatter(x=list(range(len(latency_data))), y=latency_data, name='延迟(ms)'), row=1, col=1)
             fig.add_trace(go.Scatter(x=list(range(len(quality_data))), y=quality_data, name='质量评分'), row=1, col=2)
-            chart_placeholder.plotly_chart(fig, use_container_width=True)
+            chart_placeholder.plotly_chart(fig, width='stretch')
         
         progress_bar.progress((cycle + 1) / cycles)
         time.sleep(0.5)
@@ -591,7 +555,7 @@ def run_test_mode():
     
     df = pd.DataFrame(results_data)
     st.subheader("🧪 测试结果")
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(df, width='stretch')
     
     passed_tests = sum(1 for r in results_data if r['测试结果'] == '通过')
     success_rate = passed_tests / len(results_data) * 100
@@ -691,7 +655,7 @@ def run_signal_test(signal_type: str, snr_db: float, length: int):
     fig.add_trace(go.Scatter(x=freqs[:len(freqs)//2], y=np.abs(spectrum[:len(spectrum)//2]), name='幅度谱'), row=2, col=1)
     fig.add_trace(go.Scatter(x=freqs[:len(freqs)//2], y=np.angle(spectrum[:len(spectrum)//2]), name='相位谱'), row=2, col=2)
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -735,7 +699,7 @@ def analyze_h5_file(filepath: Path):
                     name='增强信号'
                 ))
                 fig.update_layout(title="增强信号波形", xaxis_title="采样点", yaxis_title="幅度")
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch')
             
             if 'quality_matrix' in f:
                 quality_data = f['quality_matrix'][:]
@@ -750,7 +714,7 @@ def analyze_h5_file(filepath: Path):
                     name='质量评分'
                 ))
                 fig.update_layout(title="质量评分趋势", xaxis_title="时间窗口", yaxis_title="质量评分")
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch')
     
     except Exception as e:
         st.error(f"❌ 分析文件时出错: {str(e)}")
@@ -857,7 +821,7 @@ def show_main_dashboard(duration: float, cycles: int):
     fig.update_xaxes(gridcolor='rgba(255,255,255,0.1)')
     fig.update_yaxes(gridcolor='rgba(255,255,255,0.1)')
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown('</div>', unsafe_allow_html=True)
 
 def show_data_analysis_main():
@@ -885,7 +849,7 @@ def show_data_analysis_main():
         col1, col2 = st.columns([2, 1])
         
         with col2:
-            if st.button("📊 分析数据", type="primary"):
+            if st.button("分析数据", type="primary"):
                 analyze_h5_file(selected_file)
         
         with col1:
@@ -894,47 +858,47 @@ def show_data_analysis_main():
         st.warning("📂 未找到数据文件，请先运行优化生成数据")
     
     # 历史数据概览
-    st.markdown("---")
-    st.markdown("#### 📈 历史趋势")
+    # st.markdown("---")
+    # st.markdown("#### 📈 历史趋势")
     
-    # 生成示例历史数据
-    dates = pd.date_range(start='2024-01-01', end='2024-12-31', freq='D')
-    quality_trend = np.random.normal(0.7, 0.1, len(dates)).cumsum() * 0.001 + 0.7
-    quality_trend = np.clip(quality_trend, 0.3, 0.95)
+    # # 生成示例历史数据
+    # dates = pd.date_range(start='2024-01-01', end='2024-12-31', freq='D')
+    # quality_trend = np.random.normal(0.7, 0.1, len(dates)).cumsum() * 0.001 + 0.7
+    # quality_trend = np.clip(quality_trend, 0.3, 0.95)
     
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=dates,
-        y=quality_trend,
-        mode='lines',
-        name='信号质量',
-        line=dict(color='#00d4ff', width=2)
-    ))
+    # fig = go.Figure()
+    # fig.add_trace(go.Scatter(
+    #     x=dates,
+    #     y=quality_trend,
+    #     mode='lines',
+    #     name='信号质量',
+    #     line=dict(color='#00d4ff', width=2)
+    # ))
     
-    fig.update_layout(
-        title="年度信号质量趋势",
-        xaxis_title="日期",
-        yaxis_title="质量评分",
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='white'),
-        height=400
-    )
+    # fig.update_layout(
+    #     title="年度信号质量趋势",
+    #     xaxis_title="日期",
+    #     yaxis_title="质量评分",
+    #     plot_bgcolor='rgba(0,0,0,0)',
+    #     paper_bgcolor='rgba(0,0,0,0)',
+    #     font=dict(color='white'),
+    #     height=400
+    # )
     
-    fig.update_xaxes(gridcolor='rgba(255,255,255,0.1)')
-    fig.update_yaxes(gridcolor='rgba(255,255,255,0.1)')
+    # fig.update_xaxes(gridcolor='rgba(255,255,255,0.1)')
+    # fig.update_yaxes(gridcolor='rgba(255,255,255,0.1)')
     
-    st.plotly_chart(fig, use_container_width=True)
+    # st.plotly_chart(fig, width='stretch')
 
 def show_test_interface_main():
     """显示测试界面主版本"""
-    st.markdown("### 🧪 信号测试中心")
+    st.markdown("### 信号测试中心")
     
     # 测试配置
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("#### 🔧 测试配置")
+        st.markdown("#### 测试配置")
         
         test_signal_type = st.selectbox(
             "信号类型",
@@ -945,32 +909,32 @@ def show_test_interface_main():
         test_snr = st.slider("信噪比 (dB)", -10.0, 30.0, 15.0, 0.5)
         test_length = st.slider("信号长度", 500, 5000, 2000, 100)
         
-        if st.button("🚀 运行测试", type="primary", use_container_width=True):
+        if st.button("运行测试", type="primary", width='stretch'):
             run_signal_test(test_signal_type, test_snr, test_length)
     
     with col2:
-        st.markdown("#### 📋 快速测试")
+        st.markdown("#### 快速测试")
         
-        if st.button("🎯 QPSK 标准测试", use_container_width=True):
+        if st.button("QPSK 标准测试", width='stretch'):
             run_signal_test("qpsk", 15.0, 2000)
         
-        if st.button("📡 OFDM 性能测试", use_container_width=True):
+        if st.button("OFDM 性能测试", width='stretch'):
             run_signal_test("ofdm", 10.0, 3000)
         
-        if st.button("🔄 FSK 稳定性测试", use_container_width=True):
+        if st.button("FSK 稳定性测试", width='stretch'):
             run_signal_test("fsk", 20.0, 1500)
         
-        if st.button("🎭 噪声环境测试", use_container_width=True):
+        if st.button("噪声环境测试", width='stretch'):
             run_signal_test("noise", 5.0, 2500)
 
 def show_interactive_optimization():
-    """显示交互式信号优化界面"""
-    st.markdown("### 🎛️ 交互式信号优化")
+    """显示交互式信号优化界面 - 完整优化流程"""
+    st.markdown("### 信号优化系统")
     
     st.markdown("""
     <div style="background: rgba(20, 40, 80, 0.8); padding: 1rem; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2); margin-bottom: 1rem;">
     <p style="color: #ffffff; margin: 0;">
-    本模块允许您实时调节射频前端的信号参数，并通过自适应滤波算法观察优化效果。
+    <strong>完整优化流程说明：</strong>环境数据采集 → 注意力机制策略选择 → 时频联合滤波 → 深度残差网络增强 → 质量评估与参数调整
     </p>
     </div>
     """, unsafe_allow_html=True)
@@ -1026,7 +990,7 @@ def show_interactive_optimization():
         st.markdown("---")
         
         # 多径干扰控制
-        st.markdown("##### 🌊 多径干扰")
+        st.markdown("##### 多径干扰")
         multipath_strength = st.slider(
             "多径强度",
             min_value=0.0,
@@ -1056,18 +1020,8 @@ def show_interactive_optimization():
         
         st.markdown("---")
         
-        # 滤波策略选择
-        st.markdown("##### 🔧 滤波策略")
-        filter_strategy = st.selectbox(
-            "滤波算法",
-            options=["Kalman", "Wiener", "LMS自适应", "Butterworth"],
-            index=0,
-            help="选择应用的滤波策略"
-        )
-        
         # 信号采样设置
-        st.markdown("---")
-        st.markdown("##### ⏱️ 采样设置")
+        st.markdown("##### 采样设置")
         sample_length = st.slider(
             "采样长度",
             min_value=500,
@@ -1079,18 +1033,17 @@ def show_interactive_optimization():
         
         # 生成和优化按钮
         st.markdown("---")
-        if st.button("🚀 生成并优化信号", type="primary", use_container_width=True):
-            with display_col:
-                run_interactive_optimization(
-                    signal_power_db, signal_variation,
-                    noise_power_db, noise_variation,
-                    multipath_strength, multipath_decay, multipath_paths,
-                    filter_strategy, sample_length
-                )
+        if st.button("执行完整优化流程", type="primary", width='stretch'):
+            run_complete_optimization_pipeline(
+                signal_power_db, signal_variation,
+                noise_power_db, noise_variation,
+                multipath_strength, multipath_decay, multipath_paths,
+                sample_length, display_col
+            )
     
-    with display_col:
-        st.markdown("#### 📊 信号对比与分析")
-        st.info("👈 请在左侧调节参数，然后点击\"生成并优化信号\"按钮查看优化效果")
+    # with display_col:
+    #     st.markdown("#### 📊 优化结果展示")
+    #     st.info("👈 请在左侧调节参数，然后点击\"执行完整优化流程\"按钮查看优化效果")
 
 
 def generate_custom_signal(signal_power_db, signal_variation, noise_power_db, 
@@ -1266,6 +1219,939 @@ def calculate_signal_metrics(clean_signal, noisy_signal, filtered_signal):
     }
 
 
+def apply_all_filters(signal_data):
+    """应用所有滤波策略并返回结果"""
+    filter_results = {}
+    
+    # 1. 卡尔曼滤波
+    filter_results['Kalman'] = kalman_filter_impl(signal_data, q=0.1, r=1.0)
+    
+    # 2. Wiener滤波
+    filter_results['Wiener'] = wiener_filter_impl(signal_data, window_size=32)
+    
+    # 3. 粒子滤波 (简化版，使用平均滤波模拟)
+    filter_results['Particle'] = particle_filter_impl(signal_data)
+    
+    # 4. 小波阈值滤波
+    filter_results['Wavelet'] = wavelet_filter_impl(signal_data)
+    
+    # 5. 滑动平均滤波
+    filter_results['MovingAvg'] = moving_average_filter_impl(signal_data, window=20)
+    
+    return filter_results
+
+
+def particle_filter_impl(signal_data, num_particles=50):
+    """粒子滤波实现（简化版）- 支持复数信号"""
+    n = len(signal_data)
+    filtered = np.zeros_like(signal_data)
+    
+    # 分别处理实部和虚部
+    real_part = np.real(signal_data)
+    imag_part = np.imag(signal_data)
+    
+    # 实部粒子滤波
+    particles_real = np.tile(real_part[0], num_particles) + np.random.normal(0, 0.1, num_particles)
+    weights_real = np.ones(num_particles) / num_particles
+    
+    for i in range(n):
+        particles_real += np.random.normal(0, 0.05, num_particles)
+        likelihood = np.exp(-0.5 * (particles_real - real_part[i])**2 / 0.1)
+        weights_real = likelihood / (np.sum(likelihood) + 1e-10)
+        filtered[i] = np.sum(particles_real * weights_real)
+        
+        if 1.0 / (np.sum(weights_real**2) + 1e-10) < num_particles / 2:
+            indices = np.random.choice(num_particles, num_particles, p=weights_real)
+            particles_real = particles_real[indices]
+            weights_real = np.ones(num_particles) / num_particles
+    
+    filtered_real = filtered.real.copy()
+    
+    # 虚部粒子滤波
+    particles_imag = np.tile(imag_part[0], num_particles) + np.random.normal(0, 0.1, num_particles)
+    weights_imag = np.ones(num_particles) / num_particles
+    
+    for i in range(n):
+        particles_imag += np.random.normal(0, 0.05, num_particles)
+        likelihood = np.exp(-0.5 * (particles_imag - imag_part[i])**2 / 0.1)
+        weights_imag = likelihood / (np.sum(likelihood) + 1e-10)
+        filtered[i] = np.sum(particles_imag * weights_imag)
+        
+        if 1.0 / (np.sum(weights_imag**2) + 1e-10) < num_particles / 2:
+            indices = np.random.choice(num_particles, num_particles, p=weights_imag)
+            particles_imag = particles_imag[indices]
+            weights_imag = np.ones(num_particles) / num_particles
+    
+    filtered_imag = filtered.real.copy()
+    
+    return filtered_real + 1j * filtered_imag
+
+
+def wavelet_filter_impl(signal_data, threshold_scale=0.5):
+    """小波阈值滤波实现（简化版）"""
+    from scipy import signal as scipy_signal
+    
+    # 使用离散小波变换（简化实现）
+    # 这里使用高通/低通滤波器模拟小波分解
+    sos = scipy_signal.butter(4, 0.1, btype='low', output='sos')
+    filtered = scipy_signal.sosfiltfilt(sos, np.real(signal_data)) + \
+               1j * scipy_signal.sosfiltfilt(sos, np.imag(signal_data))
+    
+    # 阈值处理
+    threshold = threshold_scale * np.std(signal_data - filtered)
+    residual = signal_data - filtered
+    residual[np.abs(residual) < threshold] = 0
+    
+    return filtered + residual
+
+
+def moving_average_filter_impl(signal_data, window=20):
+    """滑动平均滤波实现"""
+    filtered = np.zeros_like(signal_data)
+    half_window = window // 2
+    
+    for i in range(len(signal_data)):
+        start_idx = max(0, i - half_window)
+        end_idx = min(len(signal_data), i + half_window + 1)
+        filtered[i] = np.mean(signal_data[start_idx:end_idx])
+    
+    return filtered
+
+
+def select_optimal_filter_with_attention(filter_results, clean_signal):
+    """使用注意力机制选择最优滤波策略"""
+    filter_names = list(filter_results.keys())
+    num_filters = len(filter_names)
+    
+    # 计算每个滤波器的性能分数
+    scores = np.zeros(num_filters)
+    for i, (name, filtered) in enumerate(filter_results.items()):
+        # 计算SNR作为性能指标
+        signal_power = np.mean(np.abs(clean_signal)**2)
+        noise_power = np.mean(np.abs(filtered - clean_signal)**2)
+        snr = 10 * np.log10(signal_power / (noise_power + 1e-10))
+        scores[i] = snr
+    
+    # 注意力权重（Softmax）
+    attention_weights = np.exp(scores) / np.sum(np.exp(scores))
+    
+    # 选择最优策略
+    best_idx = np.argmax(scores)
+    best_filter = filter_names[best_idx]
+    
+    return best_filter, attention_weights, scores
+
+
+def apply_residual_network_enhancement(signal_data, num_blocks=3):
+    """应用深度残差网络增强"""
+    enhanced = signal_data.copy()
+    
+    for block in range(num_blocks):
+        # 残差连接
+        residual = enhanced
+        
+        # 简化的卷积操作（使用滑动窗口）
+        window_size = 5
+        conv_output = np.zeros_like(enhanced)
+        
+        for i in range(len(enhanced)):
+            start = max(0, i - window_size // 2)
+            end = min(len(enhanced), i + window_size // 2 + 1)
+            window = enhanced[start:end]
+            
+            # 非线性激活
+            conv_output[i] = np.tanh(np.mean(window))
+        
+        # 跨层连接
+        enhanced = conv_output + 0.3 * residual
+    
+    return enhanced
+
+
+def evaluate_signal_quality_matrix(clean_signal, noisy_signal, enhanced_signal, segment_size=50):
+    """评估信号质量并生成评估矩阵"""
+    num_segments = len(clean_signal) // segment_size
+    
+    error_rates = []
+    snrs = []
+    phase_consistencies = []
+    
+    for i in range(num_segments):
+        start = i * segment_size
+        end = (i + 1) * segment_size
+        
+        clean_seg = clean_signal[start:end]
+        noisy_seg = noisy_signal[start:end]
+        enh_seg = enhanced_signal[start:end]
+        
+        # 误码率（确保返回实数）
+        error_rate = float(np.real(np.mean(np.abs(enh_seg - clean_seg)) / (np.max(np.abs(clean_seg)) - np.min(np.abs(clean_seg)) + 1e-10)))
+        error_rates.append(error_rate)
+        
+        # SNR（确保返回实数）
+        sig_power = float(np.real(np.mean(np.abs(clean_seg)**2)))
+        noise_pow = float(np.real(np.mean(np.abs(enh_seg - clean_seg)**2)))
+        snr = float(10 * np.log10(sig_power / (noise_pow + 1e-10)))
+        snrs.append(snr)
+        
+        # 相位一致性（确保返回实数）
+        phase_clean = np.angle(np.fft.fft(clean_seg))
+        phase_enh = np.angle(np.fft.fft(enh_seg))
+        phase_diff = np.abs(phase_clean - phase_enh)
+        phase_consist = float(np.real(np.mean(np.cos(phase_diff))))
+        phase_consistencies.append(phase_consist)
+    
+    eval_matrix = np.column_stack((error_rates, snrs, phase_consistencies))
+    
+    return eval_matrix, error_rates, snrs, phase_consistencies
+
+
+def run_complete_optimization_pipeline(signal_power_db, signal_variation, noise_power_db, 
+                                      noise_variation, multipath_strength, multipath_decay, 
+                                      multipath_paths, sample_length, display_col):
+    """运行完整的优化流程"""
+    
+    with display_col:
+        progress_placeholder = st.empty()
+        
+        with st.spinner("🔄 步骤1/6: 生成环境信号数据..."):
+            # 生成信号
+            clean_signal, noisy_signal, t = generate_custom_signal(
+                signal_power_db, signal_variation,
+                noise_power_db, noise_variation,
+                multipath_strength, multipath_decay,
+                multipath_paths, sample_length
+            )
+            progress_placeholder.progress(1/6)
+        
+        with st.spinner("🔄 步骤2/6: 应用所有滤波策略..."):
+            # 应用所有滤波策略
+            filter_results = apply_all_filters(noisy_signal)
+            progress_placeholder.progress(2/6)
+        
+        with st.spinner("🔄 步骤3/6: 注意力机制选择最优策略..."):
+            # 使用注意力机制选择最优策略
+            best_filter, attention_weights, filter_scores = select_optimal_filter_with_attention(
+                filter_results, clean_signal
+            )
+            optimized_signal = filter_results[best_filter]
+            progress_placeholder.progress(3/6)
+        
+        with st.spinner("🔄 步骤4/6: 深度残差网络增强..."):
+            # 残差网络增强
+            enhanced_signal = apply_residual_network_enhancement(optimized_signal)
+            progress_placeholder.progress(4/6)
+        
+        with st.spinner("🔄 步骤5/6: 信号质量评估..."):
+            # 质量评估
+            eval_matrix, error_rates, snrs, phase_consistencies = evaluate_signal_quality_matrix(
+                clean_signal, noisy_signal, enhanced_signal
+            )
+            progress_placeholder.progress(5/6)
+        
+        with st.spinner("🔄 步骤6/6: 参数调整建议..."):
+            # 参数调整
+            avg_snr = np.mean(snrs)
+            avg_error = np.mean(error_rates)
+            
+            param_adjustments = {
+                'gain': 1.0 + 0.1 * (15 - avg_snr) / 15,  # 根据SNR调整增益
+                'bandwidth': max(0.5, 1.0 - avg_error),  # 根据误码率调整带宽
+                'modulation': 'GFSK' if avg_error < 0.1 else '2-FSK'
+            }
+            progress_placeholder.progress(1.0)
+            time.sleep(0.5)
+            progress_placeholder.empty()
+        
+        st.success("✅ 完整优化流程执行完成！")
+        
+        # ==================== 显示结果 ====================
+        
+        # 1. 各滤波策略小窗口对比
+        st.markdown("---")
+        st.markdown("#### 📊 各滤波策略对比（小窗口）")
+        
+        filter_display_names = {
+            'Kalman': '卡尔曼滤波',
+            'Wiener': '维纳滤波',
+            'Particle': '粒子滤波',
+            'Wavelet': '小波阈值滤波',
+            'MovingAvg': '滑动平均滤波'
+        }
+        
+        # 创建5个小窗口
+        cols = st.columns(5)
+        display_samples = min(200, len(t))
+        
+        for idx, (filter_name, filtered_signal) in enumerate(filter_results.items()):
+            with cols[idx]:
+                # 计算该滤波器的SNR
+                sig_pow = np.mean(np.abs(clean_signal)**2)
+                noise_pow = np.mean(np.abs(filtered_signal - clean_signal)**2)
+                snr = 10 * np.log10(sig_pow / (noise_pow + 1e-10))
+                
+                is_best = (filter_name == best_filter)
+                border_color = '#00ff88' if is_best else '#666666'
+                
+                st.markdown(f"""
+                <div style="border: 2px solid {border_color}; border-radius: 8px; padding: 0.5rem; background: rgba(20, 40, 80, 0.6);">
+                    <h6 style="color: {'#00ff88' if is_best else '#ffffff'}; text-align: center; margin: 0;">
+                        {filter_display_names[filter_name]} {'⭐' if is_best else ''}
+                    </h6>
+                    <p style="color: #00d4ff; text-align: center; font-size: 0.8rem; margin: 0.2rem 0;">
+                        SNR: {snr:.1f} dB
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # 小图表
+                fig_small = go.Figure()
+                fig_small.add_trace(go.Scatter(
+                    x=t[:display_samples]*1e6,
+                    y=np.real(filtered_signal[:display_samples]),
+                    line=dict(color='#00d4ff' if is_best else '#666666', width=1),
+                    showlegend=False
+                ))
+                fig_small.update_layout(
+                    height=150,
+                    margin=dict(l=20, r=20, t=10, b=20),
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    xaxis=dict(showgrid=False, showticklabels=False),
+                    yaxis=dict(showgrid=False, showticklabels=False),
+                    font=dict(color='white', size=8)
+                )
+                st.plotly_chart(fig_small, width='stretch')
+        
+        # 2. 注意力权重分布
+        st.markdown("---")
+        st.markdown("#### 注意力机制 - 滤波策略权重分布")
+        
+        col1, col2 = st.columns([2, 1])
+        
+        with col1:
+            fig_attention = go.Figure()
+            fig_attention.add_trace(go.Bar(
+                x=list(filter_display_names.values()),
+                y=attention_weights,
+                marker_color=['#00ff88' if name == best_filter else '#4ecdc4' 
+                             for name in filter_results.keys()],
+                text=[f'{w:.3f}' for w in attention_weights],
+                textposition='outside'
+            ))
+            fig_attention.update_layout(
+                title="滤波策略注意力权重",
+                xaxis_title="滤波策略",
+                yaxis_title="权重",
+                height=300,
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='white')
+            )
+            fig_attention.update_xaxes(gridcolor='rgba(255,255,255,0.1)')
+            fig_attention.update_yaxes(gridcolor='rgba(255,255,255,0.1)')
+            st.plotly_chart(fig_attention, width='stretch')
+        
+        with col2:
+            st.markdown(f"""
+            <div class="metric-card">
+                <h3>最优策略</h3>
+                <p style="color: #00ff88;">{filter_display_names[best_filter]}</p>
+                <small>权重: {attention_weights[list(filter_results.keys()).index(best_filter)]:.3f}</small>
+            </div>
+            <div class="metric-card">
+                <h3>策略SNR</h3>
+                <p style="color: #00d4ff;">{filter_scores[list(filter_results.keys()).index(best_filter)]:.2f} dB</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        # 3. 完整优化流程主窗口
+        st.markdown("---")
+        st.markdown("#### 完整优化流程结果（主窗口）")
+        
+        # 性能指标
+        final_metrics = calculate_signal_metrics(clean_signal, noisy_signal, enhanced_signal)
+        
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            st.markdown(f"""
+            <div class="metric-card">
+                <h3>SNR改善</h3>
+                <p style="color: {'#00ff88' if final_metrics['snr_improvement'] > 0 else '#ff6b6b'};">
+                    {final_metrics['snr_improvement']:+.2f} dB
+                </p>
+                <small>前: {final_metrics['snr_before']:.1f} dB<br>
+                后: {final_metrics['snr_after']:.1f} dB</small>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown(f"""
+            <div class="metric-card">
+                <h3>EVM降低</h3>
+                <p style="color: {'#00ff88' if final_metrics['evm_reduction'] > 0 else '#ff6b6b'};">
+                    {final_metrics['evm_reduction']:.2f}%
+                </p>
+                <small>前: {final_metrics['evm_before']:.1f}%<br>
+                后: {final_metrics['evm_after']:.1f}%</small>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            st.markdown(f"""
+            <div class="metric-card">
+                <h3>相关度</h3>
+                <p style="color: #00d4ff;">
+                    {final_metrics['corr_after']:.3f}
+                </p>
+                <small>前: {final_metrics['corr_before']:.3f}</small>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col4:
+            st.markdown(f"""
+            <div class="metric-card">
+                <h3>平均误码率</h3>
+                <p style="color: #ffa500;">
+                    {avg_error:.4f}
+                </p>
+                <small>质量评分: {(1-avg_error)*100:.1f}%</small>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        # 信号波形对比
+        st.markdown("#### 📈 完整流程信号对比")
+        
+        display_samples_main = min(1000, len(t))
+        t_display = t[:display_samples_main]
+        
+        fig_main = make_subplots(
+            rows=2, cols=2,
+            subplot_titles=('原始信号', '带噪信号', 
+                           f'最优滤波({filter_display_names[best_filter]})', '残差网络增强'),
+            specs=[[{"secondary_y": False}, {"secondary_y": False}],
+                   [{"secondary_y": False}, {"secondary_y": False}]]
+        )
+        
+        # 原始信号
+        fig_main.add_trace(
+            go.Scatter(x=t_display*1e6, y=np.real(clean_signal[:display_samples_main]),
+                      name='原始', line=dict(color='#00ff88', width=1.5)),
+            row=1, col=1
+        )
+        
+        # 带噪信号
+        fig_main.add_trace(
+            go.Scatter(x=t_display*1e6, y=np.real(noisy_signal[:display_samples_main]),
+                      name='带噪', line=dict(color='#ff6b6b', width=1)),
+            row=1, col=2
+        )
+        
+        # 最优滤波
+        fig_main.add_trace(
+            go.Scatter(x=t_display*1e6, y=np.real(optimized_signal[:display_samples_main]),
+                      name='滤波后', line=dict(color='#00d4ff', width=1.5)),
+            row=2, col=1
+        )
+        fig_main.add_trace(
+            go.Scatter(x=t_display*1e6, y=np.real(clean_signal[:display_samples_main]),
+                      name='参考', line=dict(color='#00ff88', width=1, dash='dash'),
+                      opacity=0.4),
+            row=2, col=1
+        )
+        
+        # 残差增强
+        fig_main.add_trace(
+            go.Scatter(x=t_display*1e6, y=np.real(enhanced_signal[:display_samples_main]),
+                      name='增强', line=dict(color='#4ecdc4', width=1.5)),
+            row=2, col=2
+        )
+        fig_main.add_trace(
+            go.Scatter(x=t_display*1e6, y=np.real(clean_signal[:display_samples_main]),
+                      name='参考', line=dict(color='#00ff88', width=1, dash='dash'),
+                      opacity=0.4),
+            row=2, col=2
+        )
+        
+        fig_main.update_xaxes(title_text="时间 (μs)", gridcolor='rgba(255,255,255,0.1)')
+        fig_main.update_yaxes(title_text="幅度", gridcolor='rgba(255,255,255,0.1)')
+        
+        fig_main.update_layout(
+            height=600,
+            showlegend=False,
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(color='white')
+        )
+        
+        st.plotly_chart(fig_main, width='stretch')
+        
+        # 4. 质量评估矩阵
+        st.markdown("---")
+        st.markdown("#### 📊 信号质量评估矩阵")
+        
+        col1, col2 = st.columns([2, 1])
+        
+        with col1:
+            fig_quality = make_subplots(
+                rows=1, cols=3,
+                subplot_titles=('误码率', 'SNR (dB)', '相位一致性')
+            )
+            
+            segments = np.arange(len(error_rates))
+            
+            fig_quality.add_trace(
+                go.Scatter(x=segments, y=error_rates, line=dict(color='#ff6b6b', width=2)),
+                row=1, col=1
+            )
+            
+            fig_quality.add_trace(
+                go.Scatter(x=segments, y=snrs, line=dict(color='#00d4ff', width=2)),
+                row=1, col=2
+            )
+            
+            fig_quality.add_trace(
+                go.Scatter(x=segments, y=phase_consistencies, line=dict(color='#4ecdc4', width=2)),
+                row=1, col=3
+            )
+            
+            fig_quality.update_xaxes(title_text="片段", gridcolor='rgba(255,255,255,0.1)')
+            fig_quality.update_yaxes(gridcolor='rgba(255,255,255,0.1)')
+            
+            fig_quality.update_layout(
+                height=300,
+                showlegend=False,
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='white')
+            )
+            
+            st.plotly_chart(fig_quality, width='stretch')
+        
+        with col2:
+            st.markdown("##### 📋 参数调整建议")
+            st.markdown(f"""
+            <div style="background: rgba(20, 40, 80, 0.8); padding: 1rem; border-radius: 8px; border: 1px solid rgba(0, 212, 255, 0.3);">
+                <p style="color: #ffffff; margin: 0.3rem 0;">
+                    <strong style="color: #00d4ff;">增益调整:</strong> {param_adjustments['gain']:.2f}x
+                </p>
+                <p style="color: #ffffff; margin: 0.3rem 0;">
+                    <strong style="color: #00d4ff;">带宽调整:</strong> {param_adjustments['bandwidth']:.2f}
+                </p>
+                <p style="color: #ffffff; margin: 0.3rem 0;">
+                    <strong style="color: #00d4ff;">建议调制:</strong> {param_adjustments['modulation']}
+                </p>
+                <hr style="border-color: rgba(0, 212, 255, 0.3); margin: 0.5rem 0;">
+                <p style="color: #00ff88; margin: 0.3rem 0; font-size: 0.9rem;">
+                    <strong>质量评分:</strong> {(1-avg_error)*100:.1f}%
+                </p>
+                <p style="color: #00d4ff; margin: 0.3rem 0; font-size: 0.9rem;">
+                    <strong>平均SNR:</strong> {avg_snr:.2f} dB
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        # 5. 详细分析图表
+        st.markdown("---")
+        st.markdown("#### 📈 详细分析结果")
+        
+        with st.expander("🔍 查看完整分析图表", expanded=False):
+            # 创建子标签页
+            tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+                "环境特征", "相关性矩阵", "注意力权重", 
+                "PCA方差解释", "信号片段对比", "参数调整对比"
+            ])
+            
+            with tab1:
+                st.markdown("##### 环境特征随时间变化")
+                # 构建原始环境特征（模拟）- 使用更密集的采样点以显示细节
+                t_env = np.linspace(0, 10, 1000)  # 0-10秒
+                
+                # 信号强度 (dBm) - 蓝色实线
+                signal_strength = signal_power_db + signal_variation * np.sin(2*np.pi*0.5*t_env) + np.random.normal(0, 3, 1000)
+                
+                # 噪声功率 - 红色虚线
+                noise_power = noise_power_db + noise_variation * np.sin(2*np.pi*0.3*t_env) + np.random.normal(0, 0.5, 1000)
+                
+                # 多径干扰 - 绿色点线
+                multipath_inter = multipath_strength * (1 + multipath_decay * np.sin(2*np.pi*0.7*t_env)) + np.random.normal(0, 0.8, 1000)
+                
+                # 创建三轴图表（模仿附件样式）
+                fig_env = go.Figure()
+                
+                # 添加信号强度轨迹（左Y轴，蓝色实线）
+                fig_env.add_trace(go.Scatter(
+                    x=t_env,
+                    y=signal_strength,
+                    name='信号强度 (dBm)',
+                    line=dict(color='#0066cc', width=1),
+                    mode='lines',
+                    yaxis='y1'
+                ))
+                
+                # 添加噪声功率轨迹（中间Y轴，红色虚线）
+                fig_env.add_trace(go.Scatter(
+                    x=t_env,
+                    y=noise_power,
+                    name='噪声功率',
+                    line=dict(color='#cc0000', width=1, dash='dot'),
+                    mode='lines',
+                    yaxis='y2'
+                ))
+                
+                # 添加多径干扰轨迹（右Y轴，绿色点线）
+                fig_env.add_trace(go.Scatter(
+                    x=t_env,
+                    y=multipath_inter,
+                    name='多径干扰',
+                    line=dict(color='#00aa00', width=1, dash='dot'),
+                    mode='lines',
+                    yaxis='y3'
+                ))
+                
+                # 更新布局 - 三个Y轴
+                fig_env.update_layout(
+                    title=dict(
+                        text='环境特征随时间变化',
+                        font=dict(size=16, color='white')
+                    ),
+                    xaxis=dict(
+                        title='时间 (秒)',
+                        domain=[0.1, 0.9],
+                        gridcolor='rgba(255,255,255,0.1)',
+                        showgrid=True
+                    ),
+                    yaxis=dict(
+                        title=dict(text='信号强度 (dBm)', font=dict(color='#0066cc', size=14)),
+                        tickfont=dict(color='#0066cc'),
+                        gridcolor='rgba(255,255,255,0.1)',
+                        showgrid=True,
+                        side='left'
+                    ),
+                    yaxis2=dict(
+                        title=dict(text='噪声功率', font=dict(color='#cc0000', size=14)),
+                        tickfont=dict(color='#cc0000'),
+                        overlaying='y',
+                        side='right',
+                        showgrid=False  # 中间Y轴不显示网格
+                    ),
+                    yaxis3=dict(
+                        title=dict(text='多径干扰', font=dict(color='#00aa00', size=14)),
+                        tickfont=dict(color='#00aa00'),
+                        overlaying='y',
+                        side='right',
+                        position=1,
+                        showgrid=False  # 右侧Y轴不显示网格
+                    ),
+                    height=500,
+                    showlegend=True,
+                    legend=dict(
+                        x=0.1,
+                        y=1.15,
+                        orientation='h',
+                        bgcolor='rgba(20, 40, 80, 0.8)',
+                        bordercolor='rgba(0, 212, 255, 0.3)',
+                        borderwidth=1,
+                        font=dict(color='white')
+                    ),
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='white')
+                )
+                
+                st.plotly_chart(fig_env, width='stretch')
+            
+            with tab2:
+                st.markdown("##### 特征相关性矩阵")
+                # 计算滑动窗口相关性矩阵
+                window_size = 50
+                step = 25
+                windows = []
+                for i in range(0, len(clean_signal[:1000]) - window_size + 1, step):
+                    # 只取实部进行相关性分析，避免复数问题
+                    window = np.real(clean_signal[i:i+window_size])
+                    windows.append(window)
+                
+                windows = np.array(windows)
+                num_windows = min(20, len(windows))  # 只显示前20个窗口
+                corr_matrix = np.real(np.corrcoef(windows[:num_windows]))  # 确保返回实数矩阵
+                
+                # 处理NaN和Inf值，确保可以JSON序列化
+                corr_matrix = np.nan_to_num(corr_matrix, nan=0.0, posinf=1.0, neginf=-1.0)
+                corr_matrix = corr_matrix.astype(float).tolist()  # 转换为Python float列表
+                
+                fig_corr = go.Figure(data=go.Heatmap(
+                    z=corr_matrix,
+                    colorscale='RdBu',
+                    zmid=0,
+                    colorbar=dict(title="相关系数")
+                ))
+                
+                fig_corr.update_layout(
+                    title="时间片段相关性热力图",
+                    # xaxis_title="窗口索引",
+                    # yaxis_title="窗口索引",
+                    height=500,
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='white')
+                )
+                st.plotly_chart(fig_corr, width='stretch')
+            
+            with tab3:
+                st.markdown("##### 注意力权重分布")
+                # 创建更详细的注意力权重可视化
+                filter_names = list(filter_results.keys())
+                
+                fig_att = make_subplots(
+                    rows=2, cols=1,
+                    subplot_titles=('策略权重分布', '策略性能得分'),
+                    row_heights=[1, 0.5],
+                    vertical_spacing=0.3       # 子图间距
+                )
+                
+                # 权重分布柱状图
+                fig_att.add_trace(
+                    go.Bar(
+                        x=filter_names,
+                        y=attention_weights,
+                        marker=dict(
+                            color=attention_weights,
+                            colorscale='Viridis',
+                            showscale=True,
+                            colorbar=dict(title="权重", y=0.75, len=0.4),
+                            
+                        ),
+                        text=[f'{w:.3f}' for w in attention_weights],
+                        textposition='outside'
+                    ),
+                    row=1, col=1
+                )
+                
+                # 性能得分雷达图数据转换为柱状图
+                fig_att.add_trace(
+                    go.Bar(
+                        x=filter_names,
+                        y=filter_scores,
+                        marker=dict(color='#00d4ff'),
+                        text=[f'{s:.2f}' for s in filter_scores],
+                        textposition='auto'
+                    ),
+                    row=2, col=1
+                )
+                
+                fig_att.update_xaxes(title_text="滤波策略", gridcolor='rgba(255,255,255,0.1)')
+                fig_att.update_yaxes(title_text="权重值", gridcolor='rgba(255,255,255,0.1)', range=[0, max(attention_weights)*1.2], row=1, col=1)
+                fig_att.update_yaxes(title_text="性能得分", gridcolor='rgba(255,255,255,0.1)', row=2, col=1)
+
+                fig_att.update_layout(
+                    height=700,
+                    showlegend=False,
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='white')
+                )
+                st.plotly_chart(fig_att, width='stretch')
+            
+            with tab4:
+                st.markdown("##### PCA主成分方差解释")
+                # 对相关性矩阵进行PCA
+                from sklearn.decomposition import PCA
+                
+                # 将列表转回numpy数组进行PCA分析
+                corr_matrix_np = np.array(corr_matrix)
+                
+                pca = PCA()
+                pca.fit(corr_matrix_np)
+                
+                explained_var = pca.explained_variance_ratio_[:10]  # 前10个主成分
+                # 确保explained_var是实数
+                explained_var = np.real(explained_var).astype(float)
+                cumsum_var = np.cumsum(explained_var)
+                
+                fig_pca = make_subplots(
+                    rows=1, cols=2,
+                    subplot_titles=('方差解释比例', '累积方差解释'),
+                    specs=[[{"type": "bar"}, {"type": "scatter"}]]
+                )
+                
+                fig_pca.add_trace(
+                    go.Bar(
+                        x=[f'PC{i+1}' for i in range(len(explained_var))],
+                        y=explained_var * 100,
+                        marker=dict(color='#00d4ff'),
+                        text=[f'{v*100:.1f}%' for v in explained_var],
+                        textposition='outside'
+                    ),
+                    row=1, col=1
+                )
+                
+                fig_pca.add_trace(
+                    go.Scatter(
+                        x=[f'PC{i+1}' for i in range(len(cumsum_var))],
+                        y=cumsum_var * 100,
+                        mode='lines+markers',
+                        line=dict(color='#4ecdc4', width=3),
+                        marker=dict(size=8)
+                    ),
+                    row=1, col=2
+                )
+                
+                fig_pca.update_xaxes(title_text="主成分", gridcolor='rgba(255,255,255,0.1)')
+                fig_pca.update_yaxes(title_text="方差解释 (%)", gridcolor='rgba(255,255,255,0.1)')
+                
+                fig_pca.update_layout(
+                    height=400,
+                    showlegend=False,
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='white')
+                )
+                st.plotly_chart(fig_pca, width='stretch')
+                
+                st.info(f"前10个主成分累计解释方差: {cumsum_var[-1]*100:.2f}%")
+            
+            with tab5:
+                st.markdown("##### 信号片段增强前后对比")
+                # 选择几个代表性片段进行对比
+                segment_indices = [0, len(clean_signal)//4, len(clean_signal)//2, 3*len(clean_signal)//4]
+                segment_size = 100
+                
+                fig_seg = make_subplots(
+                    rows=2, cols=2,
+                    subplot_titles=[f'片段 {i+1}' for i in range(4)],
+                    vertical_spacing=0.12,
+                    horizontal_spacing=0.1
+                )
+                
+                for idx, seg_start in enumerate(segment_indices):
+                    row = idx // 2 + 1
+                    col = idx % 2 + 1
+                    
+                    seg_end = min(seg_start + segment_size, len(clean_signal))
+                    t_seg = np.arange(segment_size) if seg_end - seg_start >= segment_size else np.arange(seg_end - seg_start)
+                    
+                    # 原始信号片段
+                    fig_seg.add_trace(
+                        go.Scatter(x=t_seg, y=np.real(noisy_signal[seg_start:seg_end]),
+                                  line=dict(color='#ff6b6b', width=1, dash='dot'),
+                                  name='带噪信号', showlegend=(idx==0)),
+                        row=row, col=col
+                    )
+                    
+                    # 增强信号片段
+                    fig_seg.add_trace(
+                        go.Scatter(x=t_seg, y=np.real(enhanced_signal[seg_start:seg_end]),
+                                  line=dict(color='#00d4ff', width=1.5),
+                                  name='增强信号', showlegend=(idx==0)),
+                        row=row, col=col
+                    )
+                    
+                    # 清洁信号片段
+                    fig_seg.add_trace(
+                        go.Scatter(x=t_seg, y=np.real(clean_signal[seg_start:seg_end]),
+                                  line=dict(color='#00ff88', width=1, dash='dash'),
+                                  name='理想信号', showlegend=(idx==0)),
+                        row=row, col=col
+                    )
+                
+                fig_seg.update_xaxes(title_text="采样点", gridcolor='rgba(255,255,255,0.1)')
+                fig_seg.update_yaxes(title_text="幅度", gridcolor='rgba(255,255,255,0.1)')
+                
+                fig_seg.update_layout(
+                    height=600,
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='white'),
+                    legend=dict(
+                        bgcolor='rgba(20, 40, 80, 0.8)',
+                        bordercolor='rgba(0, 212, 255, 0.3)',
+                        borderwidth=1
+                    )
+                )
+                st.plotly_chart(fig_seg, width='stretch')
+            
+            with tab6:
+                st.markdown("##### 参数调整对比")
+                # 显示调整前后的参数对比
+                original_params = {
+                    'gain': 1.0,
+                    'bandwidth': 1.0,
+                    'modulation': '2-FSK'
+                }
+                
+                param_names = list(original_params.keys())
+                original_values = [1.0, 1.0, 1.0]  # 标准化值
+                adjusted_values = [
+                    param_adjustments['gain'],
+                    param_adjustments['bandwidth'],
+                    1.0 if param_adjustments['modulation'] == '2-FSK' else 1.2
+                ]
+                
+                fig_param = go.Figure()
+                
+                fig_param.add_trace(go.Bar(
+                    name='调整前',
+                    x=['增益', '带宽', '调制方式'],
+                    y=original_values,
+                    marker=dict(color='#ff6b6b'),
+                    text=[f'{v:.2f}' for v in original_values],
+                    textposition='outside'
+                ))
+                
+                fig_param.add_trace(go.Bar(
+                    name='调整后',
+                    x=['增益', '带宽', '调制方式'],
+                    y=adjusted_values,
+                    marker=dict(color='#00d4ff'),
+                    text=[f'{v:.2f}' for v in adjusted_values],
+                    textposition='auto'
+                ))
+                
+                fig_param.update_layout(
+                    title="接收参数调整对比",
+                    barmode='group',
+                    xaxis_title="参数类型",
+                    yaxis_title="相对值",
+                    height=400,
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='white'),
+                    legend=dict(
+                        bgcolor='rgba(20, 40, 80, 0.8)',
+                        bordercolor='rgba(0, 212, 255, 0.3)',
+                        borderwidth=1
+                    )
+                )
+                fig_param.update_xaxes(gridcolor='rgba(255,255,255,0.1)')
+                fig_param.update_yaxes(gridcolor='rgba(255,255,255,0.1)')
+                
+                st.plotly_chart(fig_param, width='stretch')
+                
+                # 显示详细参数说明
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown("""
+                    <div style="background: rgba(20, 40, 80, 0.6); padding: 1rem; border-radius: 8px;">
+                        <h4 style="color: #ff6b6b;">调整前参数</h4>
+                        <p style="color: #ffffff;">增益: 1.00x (标准)</p>
+                        <p style="color: #ffffff;">带宽: 1.00 (标准)</p>
+                        <p style="color: #ffffff;">调制: 2-FSK</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                with col2:
+                    st.markdown(f"""
+                    <div style="background: rgba(20, 40, 80, 0.6); padding: 1rem; border-radius: 8px;">
+                        <h4 style="color: #00d4ff;">调整后参数</h4>
+                        <p style="color: #ffffff;">增益: {param_adjustments['gain']:.2f}x</p>
+                        <p style="color: #ffffff;">带宽: {param_adjustments['bandwidth']:.2f}</p>
+                        <p style="color: #ffffff;">调制: {param_adjustments['modulation']}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+
 def run_interactive_optimization(signal_power_db, signal_variation, noise_power_db, 
                                 noise_variation, multipath_strength, multipath_decay, 
                                 multipath_paths, filter_strategy, sample_length):
@@ -1418,7 +2304,7 @@ def run_interactive_optimization(signal_power_db, signal_variation, noise_power_
     fig.update_xaxes(gridcolor='rgba(255,255,255,0.1)')
     fig.update_yaxes(gridcolor='rgba(255,255,255,0.1)')
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # 详细参数信息
     with st.expander("📋 查看详细参数"):
@@ -1475,13 +2361,11 @@ def show_system_info(mode: str, duration: float, cycles: int, output_file: str):
         st.markdown(f"""
         **CPU 使用率**: {cpu_percent:.1f}%  
         **内存使用率**: {memory_percent:.1f}%  
-        **Python 版本**: {sys.version.split()[0]}  
-        **Streamlit 版本**: {st.__version__}
         """)
     
     # 功能模块状态
     st.markdown("---")
-    st.markdown("#### 🔧 模块状态")
+    st.markdown("#### 模块状态")
     
     modules_status = [
         {"模块": "信号优化器", "状态": "✅ 正常" if REAL_MODULES_AVAILABLE else "⚠️ 模拟"},
@@ -1492,11 +2376,11 @@ def show_system_info(mode: str, duration: float, cycles: int, output_file: str):
     ]
     
     df_modules = pd.DataFrame(modules_status)
-    st.dataframe(df_modules, use_container_width=True, hide_index=True)
+    st.dataframe(df_modules, width='stretch', hide_index=True)
     
     # 日志信息
     st.markdown("---")
-    st.markdown("#### 📝 最近日志")
+    st.markdown("#### 最近日志")
     
     log_entries = [
         f"{datetime.now().strftime('%H:%M:%S')} - 系统启动完成",

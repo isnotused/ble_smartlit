@@ -27,3 +27,4 @@ echo "================================"
 
 # 命令行输入：
 streamlit run streamlit_app_simple.py --server.port 8501 --server.headless false
+
